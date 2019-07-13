@@ -18,6 +18,16 @@ main {
   width: 100%;
 }
 
+.nav-button-container {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-button-container > button {
+  margin: 0.4rem 0;
+}
+
 .main-input {
   border: 1px solid red;
 }
