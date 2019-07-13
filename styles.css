@@ -44,3 +44,19 @@ main {
 .main-search-bar > button {
   width: 18%;
 }
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  height: 350px;
+  margin: 1rem;
+}
+
+.card > header,
+footer {
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  width: 250px;
+}
