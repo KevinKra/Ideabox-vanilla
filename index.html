@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <title>Document</title>
   </head>
   <body>
     <nav class="nav-aside">
       <div class="nav-starred">
         <h3>IdeaBox Redux</h3>
-        <h6>"Filter Starred Ideas"</h6>
+        <h6>Filter Starred Ideas</h6>
         <button>Show Starred Ideas</button>
       </div>
       <div class="nav-filter">
@@ -30,14 +31,19 @@
       <section class="main-input">
         <form action="">
           <label for="title">title</label>
-          <input type="text" name="title" />
+          <input type="text" autocomplete="off" name="title" />
           <label for="body">body</label>
-          <textarea name="body" cols="30" rows="10"></textarea>
+          <textarea
+            name="body"
+            autocomplete="off"
+            cols="30"
+            rows="10"
+          ></textarea>
           <button>Save</button>
         </form>
         <div class="main-search-bar">
-          <label for="searchBar"></label>
-          <input type="text" name="searchBar" />
+          <button>Search</button>
+          <input type="text" autocomplete="off" name="searchBar" />
         </div>
       </section>
       <section class="main-output"></section>
