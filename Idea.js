@@ -6,6 +6,6 @@ class Idea {
     this.id = Date.now();
   }
   updateQuality(quality) {
-    this.quality(quality);
+    this.quality = quality;
   }
 }
