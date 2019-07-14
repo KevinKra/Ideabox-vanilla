@@ -31,46 +31,30 @@
       <section class="main-input">
         <form action="">
           <label for="title">title</label>
-          <input type="text" autocomplete="off" name="title" />
+          <input
+            type="text"
+            autocomplete="off"
+            name="title"
+            class="title-input"
+          />
           <label for="body">body</label>
           <textarea
             name="body"
             autocomplete="off"
             cols="30"
             rows="10"
+            class="body-input"
           ></textarea>
-          <button>Save</button>
+          <button class="save-button">Save</button>
         </form>
         <div class="main-search-bar">
           <button>Search</button>
           <input type="text" autocomplete="off" name="searchBar" />
         </div>
       </section>
-      <section class="main-output">
-        <article class="card">
-          <header>
-            <button>STAR</button>
-            <button>X</button>
-          </header>
-          <main>
-            <h5>
-              Idea Title
-            </h5>
-            <p>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid,
-              animi? Doloremque, molestiae illo. Recusandae itaque, ipsum totam
-              exercitationem a, dolorem nobis vel fuga assumenda deserunt eos
-              incidunt cumque adipisci ipsam.
-            </p>
-          </main>
-          <footer>
-            <button>^</button>
-            <p>Quality:<span>Swill</span></p>
-            <button>v</button>
-          </footer>
-        </article>
-      </section>
+      <section class="main-output"></section>
     </main>
   </body>
+  <script src="Idea.js"></script>
   <script src="script.js"></script>
 </html>
