@@ -12,10 +12,14 @@ saveButton.addEventListener("click", e => {
   createCard();
 });
 
-function findMe(event) {
-  // console.log("this", this);
-  console.log("this", event.target.parentNode.parentNode);
-}
+const voteCard = (event, format) => {
+  const targetId = event.target.parentNode.parentNode.id;
+  const matchingIdea = ideasArray.filter(
+    idea => idea.id === parseInt(targetId)
+  );
+  format === "upvote" ? determineQuality(matchingIdea[0], format) : null;
+  format === "downvote" ? determineQuality(matchingIdea[0], format) : null;
+};
 
 const createCard = () => {
   const newIdea = new Idea(titleInput.value, bodyInput.value);
@@ -30,6 +34,31 @@ const appendCard = () => {
     insertCard(idea.title, idea.body, idea.id);
   });
 };
+
+function determineQuality(targetIdea, voteType) {
+  console.log("firing 1");
+  voteType === "downvote"
+    ? downvoteConditional(targetIdea)
+    : upvoteConditional(targetIdea);
+}
+
+function upvoteConditional(targetIdea) {
+  if (targetIdea.quality === "Plausible") {
+    targetIdea.updateQuality("Genius");
+  }
+  if (targetIdea.quality === "Swill") {
+    targetIdea.updateQuality("Plausible");
+  }
+}
+
+function downvoteConditional(targetIdea) {
+  if (targetIdea.quality === "Plausible") {
+    targetIdea.updateQuality("Swill");
+  }
+  if (targetIdea.quality === "Genius") {
+    targetIdea.updateQuality("Plausible");
+  }
+}
 
 function insertCard(title, body, id) {
   mainOutput.insertAdjacentHTML(
@@ -47,9 +76,9 @@ function insertCard(title, body, id) {
     </p>
   </main>
   <footer>
-    <button class='increase-quality' onclick="findMe(event)">^</button>
+    <button class='increase-quality' onclick="voteCard(event, 'upvote')">^</button>
     <p>Quality:<span>Swill</span></p>
-    <button class='decrease-quality'>v</button>
+    <button class='decrease-quality' onclick="voteCard(event, 'downvote')">v</button>
   </footer>
   </article>`
   );
