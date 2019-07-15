@@ -19,6 +19,7 @@ const createCard = () => {
 
 const appendCards = () => {
   mainOutput.innerHTML = "";
+  localStorage.setItem("storedIdeas", JSON.stringify(ideasArray));
   ideasArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
