@@ -3,25 +3,53 @@ const bodyInput = document.querySelector(".body-input");
 const saveButton = document.querySelector(".save-button");
 const mainOutput = document.querySelector(".main-output");
 
+//sorting filter buttons
+const filterSwill = document.querySelector("#filter-swill");
+const filterPlausible = document.querySelector("#filter-plausible");
+const filterGenius = document.querySelector("#filter-genius");
+
 let ideasArray = [];
+let filteredIdeas = [];
+
 retrieveLocalStorage();
 
+//event listeners
 saveButton.addEventListener("click", e => {
   e.preventDefault();
   createCard();
 });
 
+filterSwill.addEventListener("click", () => {
+  filterCards("Swill");
+});
+filterPlausible.addEventListener("click", () => {
+  filterCards("Plausible");
+});
+filterGenius.addEventListener("click", () => {
+  filterCards("Genius");
+});
+
+//card sorting by quality
+function filterCards(type) {
+  const output = ideasArray.filter(card => {
+    return card.quality === type;
+  });
+  filteredIdeas = output;
+  appendCards(filteredIdeas);
+}
+
 //card appending functionality
 const createCard = () => {
   const newIdea = new Idea(titleInput.value, bodyInput.value);
   ideasArray.push(newIdea);
-  appendCards();
+  console.log(ideasArray);
+  appendCards(ideasArray);
 };
 
-function appendCards() {
+function appendCards(fromArray) {
   mainOutput.innerHTML = "";
   localStorage.setItem("storedIdeas", JSON.stringify(ideasArray));
-  ideasArray.forEach(idea => {
+  fromArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
 }
@@ -34,7 +62,7 @@ function retrieveLocalStorage() {
     return Object.assign(new Idea(), idea);
   });
   ideasArray = boundIdeasArray;
-  appendCards();
+  appendCards(ideasArray);
 }
 
 //card favoriting
@@ -67,7 +95,7 @@ const removeCard = event => {
     return idea.id === parseInt(targetIdea.id);
   });
   ideasArray.splice(matchingIndex, 1);
-  appendCards();
+  appendCards(ideasArray);
 };
 
 //voting functionality
@@ -82,7 +110,7 @@ const voteCard = (event, format) => {
 
 function determineQuality(targetIdea, voteType) {
   voteType === "downvote" ? downVoteCard(targetIdea) : upVoteCard(targetIdea);
-  appendCards();
+  appendCards(ideasArray);
 }
 
 function upVoteCard(targetIdea) {
