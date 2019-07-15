@@ -12,6 +12,23 @@ saveButton.addEventListener("click", e => {
   createCard();
 });
 
+//card appending functionality
+const createCard = () => {
+  const newIdea = new Idea(titleInput.value, bodyInput.value);
+  ideasArray.push(newIdea);
+  appendCards();
+  // console.log(ideasArray);
+};
+
+const appendCards = () => {
+  mainOutput.innerHTML = "";
+  ideasArray.forEach(idea => {
+    insertCard(idea.title, idea.body, idea.id, idea.quality);
+  });
+  console.log(ideasArray);
+};
+
+//voting functionality
 const voteCard = (event, format) => {
   const targetId = event.target.parentNode.parentNode.id;
   const matchingIdea = ideasArray.filter(
@@ -21,28 +38,13 @@ const voteCard = (event, format) => {
   format === "downvote" ? determineQuality(matchingIdea[0], format) : null;
 };
 
-const createCard = () => {
-  const newIdea = new Idea(titleInput.value, bodyInput.value);
-  ideasArray.push(newIdea);
-  appendCard();
-  console.log(ideasArray);
-};
-
-const appendCard = () => {
-  mainOutput.innerHTML = "";
-  ideasArray.forEach(idea => {
-    insertCard(idea.title, idea.body, idea.id);
-  });
-};
-
 function determineQuality(targetIdea, voteType) {
-  console.log("firing 1");
-  voteType === "downvote"
-    ? downvoteConditional(targetIdea)
-    : upvoteConditional(targetIdea);
+  // console.log("firing 1");
+  voteType === "downvote" ? downVoteCard(targetIdea) : upVoteCard(targetIdea);
+  appendCards();
 }
 
-function upvoteConditional(targetIdea) {
+function upVoteCard(targetIdea) {
   if (targetIdea.quality === "Plausible") {
     targetIdea.updateQuality("Genius");
   }
@@ -51,7 +53,7 @@ function upvoteConditional(targetIdea) {
   }
 }
 
-function downvoteConditional(targetIdea) {
+function downVoteCard(targetIdea) {
   if (targetIdea.quality === "Plausible") {
     targetIdea.updateQuality("Swill");
   }
@@ -60,7 +62,8 @@ function downvoteConditional(targetIdea) {
   }
 }
 
-function insertCard(title, body, id) {
+//card insertion
+function insertCard(title, body, id, quality) {
   mainOutput.insertAdjacentHTML(
     "beforeend",
     `<article class="card" id=${id}><header>
@@ -77,7 +80,7 @@ function insertCard(title, body, id) {
   </main>
   <footer>
     <button class='increase-quality' onclick="voteCard(event, 'upvote')">^</button>
-    <p>Quality:<span>Swill</span></p>
+    <p>Quality:<span>${quality}</span></p>
     <button class='decrease-quality' onclick="voteCard(event, 'downvote')">v</button>
   </footer>
   </article>`
