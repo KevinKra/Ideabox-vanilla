@@ -12,24 +12,25 @@
       <div class="nav-starred">
         <h3>IdeaBox Redux</h3>
         <h6>Filter Starred Ideas</h6>
-        <button>Show Starred Ideas</button>
+        <button id="filter-favorites">Show Starred Ideas</button>
+        <button id="filter-all">Show All Ideas</button>
       </div>
       <div class="nav-filter">
         <h6>Filter by Quality</h6>
         <div class="nav-button-container">
-          <button>Swill</button>
-          <button>Plausible</button>
-          <button>Genius</button>
+          <button id="filter-swill">Swill</button>
+          <button id="filter-plausible">Plausible</button>
+          <button id="filter-genius">Genius</button>
         </div>
         <form name="new-quality">
-          <label for="new-quality"><input type="text"/></label>
-          <button>Add New Quality</button>
+          <input type="text" name="new-quality" />
+          <button id="add-new-quality-btn">Add New Quality</button>
         </form>
       </div>
     </nav>
     <main class="main-container">
       <section class="main-input">
-        <form action="">
+        <form>
           <label for="title">title</label>
           <input
             type="text"
@@ -48,7 +49,7 @@
           <button class="save-button">Save</button>
         </form>
         <div class="main-search-bar">
-          <button>Search</button>
+          <button id="primary-search-btn">Search</button>
           <input type="text" autocomplete="off" name="searchBar" />
         </div>
       </section>

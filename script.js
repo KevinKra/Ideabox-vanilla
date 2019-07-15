@@ -3,25 +3,92 @@ const bodyInput = document.querySelector(".body-input");
 const saveButton = document.querySelector(".save-button");
 const mainOutput = document.querySelector(".main-output");
 
+//sorting filter buttons
+const filterSwill = document.querySelector("#filter-swill");
+const filterPlausible = document.querySelector("#filter-plausible");
+const filterGenius = document.querySelector("#filter-genius");
+const filterFavorites = document.querySelector("#filter-favorites");
+const filterAll = document.querySelector("#filter-all");
+
+//search bar elements
+const searchButton = document.querySelector("#primary-search-btn");
+
+//add new quality
+const newQualityButton = document.querySelector("#add-new-quality-btn");
+
 let ideasArray = [];
+let filteredIdeas = [];
+let qualityTypes = ["Swill", "Plausible", "Genius"];
 retrieveLocalStorage();
 
+//event listeners
 saveButton.addEventListener("click", e => {
   e.preventDefault();
   createCard();
 });
 
+searchButton.addEventListener("click", e => {
+  const query = e.target.nextElementSibling.value;
+  searchFunctionality(query);
+});
+
+newQualityButton.addEventListener("click", e => {
+  e.preventDefault();
+  const newQuality = e.target.previousElementSibling.value;
+  addNewQuality(qualityTypes, newQuality);
+});
+
+filterSwill.addEventListener("click", () => {
+  filterCards("quality", "Swill");
+});
+filterPlausible.addEventListener("click", () => {
+  filterCards("quality", "Plausible");
+});
+filterGenius.addEventListener("click", () => {
+  filterCards("quality", "Genius");
+});
+filterFavorites.addEventListener("click", () => {
+  filterCards("favorite", true);
+});
+filterAll.addEventListener("click", () => {
+  appendCards(ideasArray);
+});
+
+//adding new quality functionality
+function addNewQuality(qualityArray, newElement) {
+  qualityArray.push(newElement);
+  localStorage.setItem("storedQualities", JSON.stringify(qualityArray));
+}
+
+//searching functionality
+function searchFunctionality(query) {
+  const output = ideasArray.filter(idea => {
+    return idea.title === query || idea.body === query;
+  });
+  filteredIdeas = output;
+  appendCards(filteredIdeas);
+}
+
+//card sorting by quality
+function filterCards(property, type) {
+  const output = ideasArray.filter(card => {
+    return card[property] === type;
+  });
+  filteredIdeas = output;
+  appendCards(filteredIdeas);
+}
+
 //card appending functionality
 const createCard = () => {
   const newIdea = new Idea(titleInput.value, bodyInput.value);
   ideasArray.push(newIdea);
-  appendCards();
+  appendCards(ideasArray);
 };
 
-function appendCards() {
+function appendCards(fromArray) {
   mainOutput.innerHTML = "";
   localStorage.setItem("storedIdeas", JSON.stringify(ideasArray));
-  ideasArray.forEach(idea => {
+  fromArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
 }
@@ -29,12 +96,16 @@ function appendCards() {
 //localStorage interaction
 function retrieveLocalStorage() {
   const savedIdeasArray = localStorage.getItem("storedIdeas");
-  unboundIdeasArray = JSON.parse(savedIdeasArray);
-  const boundIdeasArray = unboundIdeasArray.map(idea => {
-    return Object.assign(new Idea(), idea);
-  });
-  ideasArray = boundIdeasArray;
-  appendCards();
+  const savedQualitiesArray = localStorage.getItem("storedQualities");
+  if (savedQualitiesArray) qualityTypes = JSON.parse(savedQualitiesArray);
+  const unboundIdeasArray = JSON.parse(savedIdeasArray);
+  if (unboundIdeasArray) {
+    const boundIdeasArray = unboundIdeasArray.map(idea => {
+      return Object.assign(new Idea(), idea);
+    });
+    ideasArray = boundIdeasArray;
+    appendCards(ideasArray);
+  }
 }
 
 //card favoriting
@@ -67,7 +138,7 @@ const removeCard = event => {
     return idea.id === parseInt(targetIdea.id);
   });
   ideasArray.splice(matchingIndex, 1);
-  appendCards();
+  appendCards(ideasArray);
 };
 
 //voting functionality
@@ -81,26 +152,16 @@ const voteCard = (event, format) => {
 };
 
 function determineQuality(targetIdea, voteType) {
-  voteType === "downvote" ? downVoteCard(targetIdea) : upVoteCard(targetIdea);
-  appendCards();
+  voteType === "downvote"
+    ? handleCardVote(targetIdea, qualityTypes, -1)
+    : handleCardVote(targetIdea, qualityTypes, 1);
+  appendCards(ideasArray);
 }
 
-function upVoteCard(targetIdea) {
-  if (targetIdea.quality === "Plausible") {
-    targetIdea.updateQuality("Genius");
-  }
-  if (targetIdea.quality === "Swill") {
-    targetIdea.updateQuality("Plausible");
-  }
-}
-
-function downVoteCard(targetIdea) {
-  if (targetIdea.quality === "Plausible") {
-    targetIdea.updateQuality("Swill");
-  }
-  if (targetIdea.quality === "Genius") {
-    targetIdea.updateQuality("Plausible");
-  }
+function handleCardVote(targetIdea, qualityTypes, indexStep) {
+  const qualityIndex = qualityTypes.indexOf(targetIdea.quality);
+  if (qualityTypes[qualityIndex + indexStep])
+    targetIdea.updateQuality(qualityTypes[qualityIndex + indexStep]);
 }
 
 //misc functionality
