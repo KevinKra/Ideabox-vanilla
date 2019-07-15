@@ -45,6 +45,7 @@ const favoriteCard = event => {
   });
   matchingIdea.toggleFavoriteCard();
   renderFavorited(matchingIdea, targetIdea);
+  localStorage.setItem("storedIdeas", JSON.stringify(ideasArray));
 };
 
 const renderFavorited = (matchingIdea, targetIdea) => {
