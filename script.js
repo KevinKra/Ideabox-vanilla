@@ -38,14 +38,15 @@ const favoriteCard = event => {
 };
 
 const renderFavorited = (matchingIdea, targetIdea) => {
-  // console.log(matchingIdea);
   matchingIdea.favorite === true
-    ? updateIdeaFavorite(targetIdea)
-    : console.log("unfavorited");
+    ? updateIdeaFavorite(targetIdea, true)
+    : updateIdeaFavorite(targetIdea, false);
 };
 
-const updateIdeaFavorite = idea => {
-  idea.classList.add("favorite");
+const updateIdeaFavorite = (idea, status) => {
+  status === true
+    ? idea.classList.add("favorite")
+    : idea.classList.remove("favorite");
 };
 
 //voting functionality
@@ -81,11 +82,11 @@ function downVoteCard(targetIdea) {
   }
 }
 
+//card insertion
 function initialClassNames(input) {
   if (input === true) return "favorite";
 }
 
-//card insertion
 function insertCard(title, body, id, quality, favorite) {
   mainOutput.insertAdjacentHTML(
     "beforeend",
