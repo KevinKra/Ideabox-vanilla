@@ -10,6 +10,9 @@ const filterGenius = document.querySelector("#filter-genius");
 const filterFavorites = document.querySelector("#filter-favorites");
 const filterAll = document.querySelector("#filter-all");
 
+//search bar elements
+const searchButton = document.querySelector("#primary-search-btn");
+
 let ideasArray = [];
 let filteredIdeas = [];
 retrieveLocalStorage();
@@ -18,6 +21,11 @@ retrieveLocalStorage();
 saveButton.addEventListener("click", e => {
   e.preventDefault();
   createCard();
+});
+
+searchButton.addEventListener("click", e => {
+  const query = e.target.nextElementSibling.value;
+  searchFunctionality(query);
 });
 
 filterSwill.addEventListener("click", () => {
@@ -30,11 +38,22 @@ filterGenius.addEventListener("click", () => {
   filterCards("quality", "Genius");
 });
 filterFavorites.addEventListener("click", () => {
-  filterCards(true, "favorite");
+  filterCards("favorite", true);
 });
 filterAll.addEventListener("click", () => {
   appendCards(ideasArray);
 });
+
+//searching functionality
+function searchFunctionality(query) {
+  console.log(query);
+  const output = ideasArray.filter(idea => {
+    return idea.title === query || idea.body === query;
+  });
+  console.log(output);
+  filteredIdeas = output;
+  appendCards(filteredIdeas);
+}
 
 //card sorting by quality
 function filterCards(property, type) {
