@@ -7,10 +7,11 @@ const mainOutput = document.querySelector(".main-output");
 const filterSwill = document.querySelector("#filter-swill");
 const filterPlausible = document.querySelector("#filter-plausible");
 const filterGenius = document.querySelector("#filter-genius");
+const filterFavorites = document.querySelector("#filter-favorites");
+const filterAll = document.querySelector("#filter-all");
 
 let ideasArray = [];
 let filteredIdeas = [];
-
 retrieveLocalStorage();
 
 //event listeners
@@ -20,19 +21,22 @@ saveButton.addEventListener("click", e => {
 });
 
 filterSwill.addEventListener("click", () => {
-  filterCards("Swill");
+  filterCards("quality", "Swill");
 });
 filterPlausible.addEventListener("click", () => {
-  filterCards("Plausible");
+  filterCards("quality", "Plausible");
 });
 filterGenius.addEventListener("click", () => {
-  filterCards("Genius");
+  filterCards("quality", "Genius");
+});
+filterFavorites.addEventListener("click", () => {
+  filterCards(true, "favorite");
 });
 
 //card sorting by quality
-function filterCards(type) {
+function filterCards(property, type) {
   const output = ideasArray.filter(card => {
-    return card.quality === type;
+    return card[property] === type;
   });
   filteredIdeas = output;
   appendCards(filteredIdeas);
@@ -42,7 +46,6 @@ function filterCards(type) {
 const createCard = () => {
   const newIdea = new Idea(titleInput.value, bodyInput.value);
   ideasArray.push(newIdea);
-  console.log(ideasArray);
   appendCards(ideasArray);
 };
 
