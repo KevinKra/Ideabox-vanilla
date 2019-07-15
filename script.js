@@ -13,6 +13,9 @@ const filterAll = document.querySelector("#filter-all");
 //search bar elements
 const searchButton = document.querySelector("#primary-search-btn");
 
+//add new quality
+const newQualityButton = document.querySelector("#add-new-quality-btn");
+
 let ideasArray = [];
 let filteredIdeas = [];
 retrieveLocalStorage();
@@ -26,6 +29,19 @@ saveButton.addEventListener("click", e => {
 searchButton.addEventListener("click", e => {
   const query = e.target.nextElementSibling.value;
   searchFunctionality(query);
+});
+
+//adding new quality functionality
+let qualityTypes = ["Swill", "Plausible", "Genius"];
+
+function addNewQuality(qualityArray, newElement) {
+  qualityArray.push(newElement);
+}
+
+newQualityButton.addEventListener("click", e => {
+  e.preventDefault();
+  const newQuality = e.target.previousElementSibling.value;
+  addNewQuality(qualityTypes, newQuality);
 });
 
 filterSwill.addEventListener("click", () => {
@@ -46,11 +62,9 @@ filterAll.addEventListener("click", () => {
 
 //searching functionality
 function searchFunctionality(query) {
-  console.log(query);
   const output = ideasArray.filter(idea => {
     return idea.title === query || idea.body === query;
   });
-  console.log(output);
   filteredIdeas = output;
   appendCards(filteredIdeas);
 }
@@ -134,26 +148,22 @@ const voteCard = (event, format) => {
 };
 
 function determineQuality(targetIdea, voteType) {
-  voteType === "downvote" ? downVoteCard(targetIdea) : upVoteCard(targetIdea);
+  voteType === "downvote"
+    ? downVoteCard(targetIdea, qualityTypes)
+    : upVoteCard(targetIdea, qualityTypes);
   appendCards(ideasArray);
 }
 
-function upVoteCard(targetIdea) {
-  if (targetIdea.quality === "Plausible") {
-    targetIdea.updateQuality("Genius");
-  }
-  if (targetIdea.quality === "Swill") {
-    targetIdea.updateQuality("Plausible");
-  }
+function upVoteCard(targetIdea, qualityTypes) {
+  const qualityIndex = qualityTypes.indexOf(targetIdea.quality);
+  if (qualityTypes[qualityIndex + 1])
+    targetIdea.updateQuality(qualityTypes[qualityIndex + 1]);
 }
 
-function downVoteCard(targetIdea) {
-  if (targetIdea.quality === "Plausible") {
-    targetIdea.updateQuality("Swill");
-  }
-  if (targetIdea.quality === "Genius") {
-    targetIdea.updateQuality("Plausible");
-  }
+function downVoteCard(targetIdea, qualityTypes) {
+  const qualityIndex = qualityTypes.indexOf(targetIdea.quality);
+  if (qualityTypes[qualityIndex - 1])
+    targetIdea.updateQuality(qualityTypes[qualityIndex - 1]);
 }
 
 //misc functionality
