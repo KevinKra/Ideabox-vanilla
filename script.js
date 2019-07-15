@@ -3,7 +3,8 @@ const bodyInput = document.querySelector(".body-input");
 const saveButton = document.querySelector(".save-button");
 const mainOutput = document.querySelector(".main-output");
 
-const ideasArray = [];
+let ideasArray = [];
+retrieveLocalStorage();
 
 saveButton.addEventListener("click", e => {
   e.preventDefault();
@@ -17,13 +18,24 @@ const createCard = () => {
   appendCards();
 };
 
-const appendCards = () => {
+function appendCards() {
   mainOutput.innerHTML = "";
   localStorage.setItem("storedIdeas", JSON.stringify(ideasArray));
   ideasArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
-};
+}
+
+//localStorage interaction
+function retrieveLocalStorage() {
+  const savedIdeasArray = localStorage.getItem("storedIdeas");
+  unboundIdeasArray = JSON.parse(savedIdeasArray);
+  const boundIdeasArray = unboundIdeasArray.map(idea => {
+    return Object.assign(new Idea(), idea);
+  });
+  ideasArray = boundIdeasArray;
+  appendCards();
+}
 
 //card favoriting
 const favoriteCard = event => {
