@@ -2,8 +2,8 @@ const titleInput = document.querySelector(".title-input");
 const bodyInput = document.querySelector(".body-input");
 const saveButton = document.querySelector(".save-button");
 const mainOutput = document.querySelector(".main-output");
-const increaseBtn = document.querySelector(".increase-quality");
-const decreaseBtn = document.querySelector(".decrease-quality");
+// const increaseBtn = document.querySelector(".increase-quality");
+// const decreaseBtn = document.querySelector(".decrease-quality");
 
 const ideasArray = [];
 
@@ -17,7 +17,6 @@ const createCard = () => {
   const newIdea = new Idea(titleInput.value, bodyInput.value);
   ideasArray.push(newIdea);
   appendCards();
-  // console.log(ideasArray);
 };
 
 const appendCards = () => {
@@ -25,7 +24,17 @@ const appendCards = () => {
   ideasArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality);
   });
-  console.log(ideasArray);
+};
+
+//card favoriting
+const favoriteCard = event => {
+  const targetId = event.target.parentNode.parentNode.id;
+  // console.log(targetId);
+  const matchingIdea = ideasArray.find(idea => {
+    return idea.id === parseInt(targetId);
+  });
+  matchingIdea.toggleFavoriteCard();
+  console.log(matchingIdea);
 };
 
 //voting functionality
@@ -39,7 +48,6 @@ const voteCard = (event, format) => {
 };
 
 function determineQuality(targetIdea, voteType) {
-  // console.log("firing 1");
   voteType === "downvote" ? downVoteCard(targetIdea) : upVoteCard(targetIdea);
   appendCards();
 }
@@ -67,7 +75,7 @@ function insertCard(title, body, id, quality) {
   mainOutput.insertAdjacentHTML(
     "beforeend",
     `<article class="card" id=${id}><header>
-    <button>STAR</button>
+    <button onclick="favoriteCard(event)">STAR</button>
     <button>X</button>
   </header>
   <main>
