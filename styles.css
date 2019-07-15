@@ -68,6 +68,10 @@ main {
   margin: 1rem;
 }
 
+.favorite {
+  color: red;
+}
+
 .card > header,
 footer {
   border: 1px solid red;
