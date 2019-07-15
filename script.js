@@ -19,7 +19,6 @@ const createCard = () => {
 
 const appendCards = () => {
   mainOutput.innerHTML = "";
-  console.log(ideasArray);
   ideasArray.forEach(idea => {
     insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
@@ -27,7 +26,7 @@ const appendCards = () => {
 
 //card favoriting
 const favoriteCard = event => {
-  const targetIdea = event.target.parentNode.parentNode;
+  const targetIdea = targetThisIdeaCard(event);
   const matchingIdea = ideasArray.find(idea => {
     return idea.id === parseInt(targetIdea.id);
   });
@@ -49,7 +48,7 @@ const updateIdeaFavorite = (idea, status) => {
 
 //card removal
 const removeCard = event => {
-  const targetIdea = event.target.parentNode.parentNode;
+  const targetIdea = targetThisIdeaCard(event);
   const matchingIndex = ideasArray.findIndex(idea => {
     return idea.id === parseInt(targetIdea.id);
   });
@@ -59,8 +58,10 @@ const removeCard = event => {
 
 //voting functionality
 const voteCard = (event, format) => {
-  const targetId = event.target.parentNode.parentNode.id;
-  const matchingIdea = ideasArray.find(idea => idea.id === parseInt(targetId));
+  const targetIdea = targetThisIdeaCard(event);
+  const matchingIdea = ideasArray.find(
+    idea => idea.id === parseInt(targetIdea.id)
+  );
   format === "upvote" ? determineQuality(matchingIdea, format) : null;
   format === "downvote" ? determineQuality(matchingIdea, format) : null;
 };
@@ -86,6 +87,11 @@ function downVoteCard(targetIdea) {
   if (targetIdea.quality === "Genius") {
     targetIdea.updateQuality("Plausible");
   }
+}
+
+//misc functionality
+function targetThisIdeaCard(event) {
+  return event.target.parentNode.parentNode;
 }
 
 //card insertion
