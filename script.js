@@ -2,8 +2,6 @@ const titleInput = document.querySelector(".title-input");
 const bodyInput = document.querySelector(".body-input");
 const saveButton = document.querySelector(".save-button");
 const mainOutput = document.querySelector(".main-output");
-// const increaseBtn = document.querySelector(".increase-quality");
-// const decreaseBtn = document.querySelector(".decrease-quality");
 
 const ideasArray = [];
 
@@ -49,14 +47,22 @@ const updateIdeaFavorite = (idea, status) => {
     : idea.classList.remove("favorite");
 };
 
+//card removal
+const removeCard = event => {
+  const targetIdea = event.target.parentNode.parentNode;
+  const matchingIndex = ideasArray.findIndex(idea => {
+    return idea.id === parseInt(targetIdea.id);
+  });
+  ideasArray.splice(matchingIndex, 1);
+  appendCards();
+};
+
 //voting functionality
 const voteCard = (event, format) => {
   const targetId = event.target.parentNode.parentNode.id;
-  const matchingIdea = ideasArray.filter(
-    idea => idea.id === parseInt(targetId)
-  );
-  format === "upvote" ? determineQuality(matchingIdea[0], format) : null;
-  format === "downvote" ? determineQuality(matchingIdea[0], format) : null;
+  const matchingIdea = ideasArray.find(idea => idea.id === parseInt(targetId));
+  format === "upvote" ? determineQuality(matchingIdea, format) : null;
+  format === "downvote" ? determineQuality(matchingIdea, format) : null;
 };
 
 function determineQuality(targetIdea, voteType) {
@@ -92,7 +98,7 @@ function insertCard(title, body, id, quality, favorite) {
     "beforeend",
     `<article class="card ${initialClassNames(favorite)}" id=${id}><header>
     <button onclick="favoriteCard(event)">STAR</button>
-    <button>X</button>
+    <button onclick="removeCard(event)">X</button>
   </header>
   <main>
     <h5>
