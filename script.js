@@ -32,13 +32,6 @@ searchButton.addEventListener("click", e => {
   searchFunctionality(query);
 });
 
-//adding new quality functionality
-
-function addNewQuality(qualityArray, newElement) {
-  qualityArray.push(newElement);
-  localStorage.setItem("storedQualities", JSON.stringify(qualityArray));
-}
-
 newQualityButton.addEventListener("click", e => {
   e.preventDefault();
   const newQuality = e.target.previousElementSibling.value;
@@ -60,6 +53,12 @@ filterFavorites.addEventListener("click", () => {
 filterAll.addEventListener("click", () => {
   appendCards(ideasArray);
 });
+
+//adding new quality functionality
+function addNewQuality(qualityArray, newElement) {
+  qualityArray.push(newElement);
+  localStorage.setItem("storedQualities", JSON.stringify(qualityArray));
+}
 
 //searching functionality
 function searchFunctionality(query) {
@@ -99,7 +98,7 @@ function retrieveLocalStorage() {
   const savedIdeasArray = localStorage.getItem("storedIdeas");
   const savedQualitiesArray = localStorage.getItem("storedQualities");
   if (savedQualitiesArray) qualityTypes = JSON.parse(savedQualitiesArray);
-  unboundIdeasArray = JSON.parse(savedIdeasArray);
+  const unboundIdeasArray = JSON.parse(savedIdeasArray);
   if (unboundIdeasArray) {
     const boundIdeasArray = unboundIdeasArray.map(idea => {
       return Object.assign(new Idea(), idea);
@@ -154,21 +153,15 @@ const voteCard = (event, format) => {
 
 function determineQuality(targetIdea, voteType) {
   voteType === "downvote"
-    ? downVoteCard(targetIdea, qualityTypes)
-    : upVoteCard(targetIdea, qualityTypes);
+    ? handleCardVote(targetIdea, qualityTypes, -1)
+    : handleCardVote(targetIdea, qualityTypes, 1);
   appendCards(ideasArray);
 }
 
-function upVoteCard(targetIdea, qualityTypes) {
+function handleCardVote(targetIdea, qualityTypes, indexStep) {
   const qualityIndex = qualityTypes.indexOf(targetIdea.quality);
-  if (qualityTypes[qualityIndex + 1])
-    targetIdea.updateQuality(qualityTypes[qualityIndex + 1]);
-}
-
-function downVoteCard(targetIdea, qualityTypes) {
-  const qualityIndex = qualityTypes.indexOf(targetIdea.quality);
-  if (qualityTypes[qualityIndex - 1])
-    targetIdea.updateQuality(qualityTypes[qualityIndex - 1]);
+  if (qualityTypes[qualityIndex + indexStep])
+    targetIdea.updateQuality(qualityTypes[qualityIndex + indexStep]);
 }
 
 //misc functionality
