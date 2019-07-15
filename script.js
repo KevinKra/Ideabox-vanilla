@@ -21,20 +21,31 @@ const createCard = () => {
 
 const appendCards = () => {
   mainOutput.innerHTML = "";
+  console.log(ideasArray);
   ideasArray.forEach(idea => {
-    insertCard(idea.title, idea.body, idea.id, idea.quality);
+    insertCard(idea.title, idea.body, idea.id, idea.quality, idea.favorite);
   });
 };
 
 //card favoriting
 const favoriteCard = event => {
-  const targetId = event.target.parentNode.parentNode.id;
-  // console.log(targetId);
+  const targetIdea = event.target.parentNode.parentNode;
   const matchingIdea = ideasArray.find(idea => {
-    return idea.id === parseInt(targetId);
+    return idea.id === parseInt(targetIdea.id);
   });
   matchingIdea.toggleFavoriteCard();
-  console.log(matchingIdea);
+  renderFavorited(matchingIdea, targetIdea);
+};
+
+const renderFavorited = (matchingIdea, targetIdea) => {
+  // console.log(matchingIdea);
+  matchingIdea.favorite === true
+    ? updateIdeaFavorite(targetIdea)
+    : console.log("unfavorited");
+};
+
+const updateIdeaFavorite = idea => {
+  idea.classList.add("favorite");
 };
 
 //voting functionality
@@ -70,11 +81,15 @@ function downVoteCard(targetIdea) {
   }
 }
 
+function initialClassNames(input) {
+  if (input === true) return "favorite";
+}
+
 //card insertion
-function insertCard(title, body, id, quality) {
+function insertCard(title, body, id, quality, favorite) {
   mainOutput.insertAdjacentHTML(
     "beforeend",
-    `<article class="card" id=${id}><header>
+    `<article class="card ${initialClassNames(favorite)}" id=${id}><header>
     <button onclick="favoriteCard(event)">STAR</button>
     <button>X</button>
   </header>
