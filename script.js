@@ -18,6 +18,7 @@ const newQualityButton = document.querySelector("#add-new-quality-btn");
 
 let ideasArray = [];
 let filteredIdeas = [];
+let qualityTypes = ["Swill", "Plausible", "Genius"];
 retrieveLocalStorage();
 
 //event listeners
@@ -32,10 +33,10 @@ searchButton.addEventListener("click", e => {
 });
 
 //adding new quality functionality
-let qualityTypes = ["Swill", "Plausible", "Genius"];
 
 function addNewQuality(qualityArray, newElement) {
   qualityArray.push(newElement);
+  localStorage.setItem("storedQualities", JSON.stringify(qualityArray));
 }
 
 newQualityButton.addEventListener("click", e => {
@@ -96,12 +97,16 @@ function appendCards(fromArray) {
 //localStorage interaction
 function retrieveLocalStorage() {
   const savedIdeasArray = localStorage.getItem("storedIdeas");
+  const savedQualitiesArray = localStorage.getItem("storedQualities");
+  if (savedQualitiesArray) qualityTypes = JSON.parse(savedQualitiesArray);
   unboundIdeasArray = JSON.parse(savedIdeasArray);
-  const boundIdeasArray = unboundIdeasArray.map(idea => {
-    return Object.assign(new Idea(), idea);
-  });
-  ideasArray = boundIdeasArray;
-  appendCards(ideasArray);
+  if (unboundIdeasArray) {
+    const boundIdeasArray = unboundIdeasArray.map(idea => {
+      return Object.assign(new Idea(), idea);
+    });
+    ideasArray = boundIdeasArray;
+    appendCards(ideasArray);
+  }
 }
 
 //card favoriting
