@@ -32,6 +32,9 @@ filterGenius.addEventListener("click", () => {
 filterFavorites.addEventListener("click", () => {
   filterCards(true, "favorite");
 });
+filterAll.addEventListener("click", () => {
+  appendCards(ideasArray);
+});
 
 //card sorting by quality
 function filterCards(property, type) {
